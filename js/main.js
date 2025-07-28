@@ -88,24 +88,25 @@
 		            required: "You have to write something to send this form"
 		        }
 		    },
-		    submitHandler: function(form) {
-		        $(form).ajaxSubmit({
-		            type: "POST",
-		            data: $(form).serialize(),
-		            url : "mail.php",
-		            success: function() {
-		                $(".contact-form").fadeTo( "slow", 1, function() {
-		                    $(".contact-form .msg-success").slideDown();
-		                });
-		                $(".contact-form").resetForm();
-		            },
-		            error: function() {
-		                $(".contact-form").fadeTo( "slow", 1, function() {
-		                    $(".contact-form .msg-failed").slideDown();
-		                });
-		            }
-		        });
-		    },
+submitHandler: function(form) {
+    $.ajax({
+        url: $(form).attr('action'),
+        method: "POST",
+        data: $(form).serialize(),
+        dataType: "json",
+        success: function() {
+            $(".contact-form").fadeTo("slow", 1, function() {
+                $(".contact-form .msg-success").slideDown();
+            });
+            $(form).trigger("reset");
+        },
+        error: function() {
+            $(".contact-form").fadeTo("slow", 1, function() {
+                $(".contact-form .msg-failed").slideDown();
+            });
+        }
+    });
+},
 		    errorPlacement: function(error, element) {
 		        element.after(error);
 		        error.hide().slideDown();
